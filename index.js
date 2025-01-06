@@ -41,13 +41,7 @@ async function run() {
      const MarathonCollection = client.db('MarathonDb').collection('marathon')
 
 
-     //get add new campaign
-   app.get('/AddMarathon', async(req, res)=>{
-    const cursor = MarathonCollection.find();
-    const result = await cursor.toArray();
-    res.send(result)
-   })
-/
+   
 
 
     app.post("/marathon", async(req,res)=>{
