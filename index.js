@@ -4,14 +4,14 @@ const cors = require("cors")
 const app = express()
 const port = process.env.PORT || 3000;
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 
 //DB_USER: Marathon-project-hunter
 //DB-PASSWORD:  TsGaSNBleg2xfAgH
 //middleware
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 
@@ -48,16 +48,16 @@ async function run() {
     res.send(result)
    })
 
-   //See More details page 
-//    app.get('/AddNewCampaign/:id', async (req, res) => {
-//     const id = req.params.id;
-//     const query = { _id: new ObjectId(id)}
-//     const result = await tulipCollection.findOne(query)
-//     res.send(result)
-//   });
+  //  See More button when click marathon details page 
+  app.get('/AddMarathon/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id)}
+    const result = await MarathonCollection.findOne(query)
+    res.send(result)
+  });
 
 
-
+//  add new marathon 
     app.post("/marathon", async(req,res)=>{
         const newMarathon = req.body;
         const result = await MarathonCollection.insertOne(newMarathon)
@@ -88,4 +88,4 @@ app.get('/', (req, res) => {
   
 app.listen(port, () => {
     console.log(` Marathon project running app listening on port ${port}`)
- })
+})
