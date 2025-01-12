@@ -39,14 +39,15 @@ async function run() {
 
     // marathon related apis
      const MarathonCollection = client.db('MarathonDb').collection('marathon')
+     const RegisterMarathonCollection = client.db('MarathonDb').collection('registerMarathon')
 
 
-     //get add new campaign
+     //get add marathon
   app.get('/AddMarathon', async(req, res)=>{
     const cursor = MarathonCollection.find();
     const result = await cursor.toArray();
     res.send(result)
-   })
+   })   
 
   //  See More button when click marathon details page 
   app.get('/AddMarathon/:id', async (req, res) => {
@@ -63,13 +64,25 @@ async function run() {
         const result = await MarathonCollection.insertOne(newMarathon)
         res.send(result)
     })
+// register Marathon add  
+    app.post("/registerMarathon", async(req,res)=>{
+        const newMarathon = req.body;
+        const result = await RegisterMarathonCollection.insertOne(newMarathon)
+        res.send(result)
+    })
 
 
-
+// marathon specific id delete
+    app.delete('/AddMarathon/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id)}
+        const result = await MarathonCollection.deleteOne(query)
+        res.send(result)
+    })
 
 
 } finally {
-    // Ensures that the client will close when you finish/error
+    // Ensures that the client will close when you finish/erzror
     // await client.close();
   }
 }
