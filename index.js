@@ -47,6 +47,12 @@ async function run() {
     const cursor = MarathonCollection.find();
     const result = await cursor.toArray();
     res.send(result)
+   })
+      // limit data
+  app.get('/AddMarathon/limit', async(req, res)=>{
+    const cursor = MarathonCollection.find();
+    const result = await cursor.limit(6).toArray();
+    res.send(result)
    })   
 
   //  See More button when click marathon details page 
@@ -70,7 +76,13 @@ async function run() {
         const result = await RegisterMarathonCollection.insertOne(newMarathon)
         res.send(result)
     })
-
+  // // updated data
+  // app.get('/updateCampaign/:id', async (req, res) => {
+  //   const id = req.params.id;
+  //   const query = { _id: new ObjectId(id)}
+  //   const result = await MarathonCollection.findOne(query)
+  //   res.send(result)
+  // });
 
 // marathon specific id delete
     app.delete('/AddMarathon/:id', async(req, res)=>{
