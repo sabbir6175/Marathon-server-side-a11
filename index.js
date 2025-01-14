@@ -43,11 +43,18 @@ async function run() {
 
 
     //get add marathon
-  app.get('/AddMarathon', async(req, res)=>{
-    const cursor = MarathonCollection.find();
-    const result = await cursor.toArray();
-    res.send(result)
-   })
+    app.get('/AddMarathon', async(req, res) => {
+      const { sortOrder = "older" } = req.query;
+      // Sort direction: -1 for descending (newest first), 1 for ascending (oldest first)
+      const sortDirection = sortOrder === "newest" ? -1 : 1;
+  
+      // Fetch marathons from the database and sort by createdAt
+      const cursor = MarathonCollection.find().sort({ createdAt: sortDirection });
+      const result = await cursor.toArray();
+  
+      res.send(result);
+  });
+  
       // limit data
   app.get('/AddMarathon/limit', async(req, res)=>{
     const cursor = MarathonCollection.find();
@@ -67,6 +74,7 @@ async function run() {
 //  add new marathon 
     app.post("/marathon", async(req,res)=>{
         const newMarathon = req.body;
+        newMarathon.createdAt = new Date();
         const result = await MarathonCollection.insertOne(newMarathon)
         res.send(result)
     })
