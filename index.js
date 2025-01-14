@@ -74,16 +74,29 @@ async function run() {
 //  add new marathon 
     app.post("/marathon", async(req,res)=>{
         const newMarathon = req.body;
+        newMarathon.totalRegistrationCount = 0;
         newMarathon.createdAt = new Date();
         const result = await MarathonCollection.insertOne(newMarathon)
         res.send(result)
     })
 // register Marathon add  
-    app.post("/registerMarathon", async(req,res)=>{
-        const newMarathon = req.body;
-        const result = await RegisterMarathonCollection.insertOne(newMarathon)
-        res.send(result)
-    })
+app.post("/registerMarathon", async (req, res) => {
+  const newRegistration = req.body;  
+
+  const registrationResult = await RegisterMarathonCollection.insertOne(newRegistration);
+
+
+  const marathonTitle = newRegistration.marathonTitle;
+  const filter = { marathonTitle };
+ 
+  const update = {
+    $inc: { totalRegistrationCount: 1 }  
+  };
+  const updateResult = await MarathonCollection.updateOne(filter, update,registrationResult);
+
+  res.send(updateResult );
+});
+
 
   // updated data
   app.put('/AddMarathon/:id', async(req,res)=>{
