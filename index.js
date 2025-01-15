@@ -54,6 +54,7 @@ async function run() {
   
       res.send(result);
   });
+   
   
       // limit data
   app.get('/AddMarathon/limit', async(req, res)=>{
@@ -79,23 +80,32 @@ async function run() {
         const result = await MarathonCollection.insertOne(newMarathon)
         res.send(result)
     })
-// register Marathon add  
-app.post("/registerMarathon", async (req, res) => {
-  const newRegistration = req.body;  
 
-  const registrationResult = await RegisterMarathonCollection.insertOne(newRegistration);
+    //get register marathon
+    app.get("/registerMarathon", async(req, res)=>{
+      const register = RegisterMarathonCollection.find();
+    const result = await register.toArray();
+    res.send(result)
+
+    })
+
+  // register Marathon add  
+  app.post("/registerMarathon", async (req, res) => {
+    const newRegistration = req.body;  
+
+    const registrationResult = await RegisterMarathonCollection.insertOne(newRegistration);
 
 
-  const marathonTitle = newRegistration.marathonTitle;
-  const filter = { marathonTitle };
- 
-  const update = {
-    $inc: { totalRegistrationCount: 1 }  
-  };
-  const updateResult = await MarathonCollection.updateOne(filter, update,registrationResult);
+    const marathonTitle = newRegistration.marathonTitle;
+    const filter = { marathonTitle };
+  
+    const update = {
+      $inc: { totalRegistrationCount: 1 }  
+    };
+    const updateResult = await MarathonCollection.updateOne(filter, update,registrationResult);
 
-  res.send(updateResult );
-});
+    res.send(updateResult );
+  });
 
 
   // updated data
@@ -125,6 +135,13 @@ app.post("/registerMarathon", async (req, res) => {
         const id = req.params.id;
         const query = { _id: new ObjectId(id)}
         const result = await MarathonCollection.deleteOne(query)
+        res.send(result)
+    })
+// marathon Register specific id delete
+    app.delete('/registerMarathon/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id)}
+        const result = await RegisterMarathonCollection.deleteOne(query)
         res.send(result)
     })
 
