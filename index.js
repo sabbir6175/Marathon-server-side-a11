@@ -10,8 +10,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 
-//DB_USER: Marathon-project-hunter
-//DB-PASSWORD:  TsGaSNBleg2xfAgH
+
 //middleware
 app.use(cors({
   origin: ['http://localhost:5173'],
